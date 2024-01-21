@@ -9,16 +9,17 @@ use Illuminate\Http\Request;
 class PostController extends Controller
 {
     public function index() {
+        $posts = Post::latest()->filter(request(['search']))->get();
+
         return view('posts', [
-            // 'posts' => Post::latest('created_at')->with(['category', 'author'])->get(),
-            'posts' => Post::latest()->search(request(['search']))->get(),
+            'posts' => $posts,
             'categories' => Category::all(),
         ]);
     }
 
     public function show(Post $post) {
         return view('post', [
-            'post' => $post,  
+            'post' => $post, 
         ]);
     }
 }

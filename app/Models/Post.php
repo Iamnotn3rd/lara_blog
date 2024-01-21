@@ -23,11 +23,12 @@ class Post extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function scopeSearch(Builder $query, array $filters) {
-        if (isset($filters['search']) ?? false) {
+    public function scopeFilter($query, array $filters) {
+        // when the search key has the value, do the function of building extra query...
+        $query->when($filters['search'] ?? false, function ($query, $search) {
             $query
-                ->where('title', 'like', '%' . request('search') . '%')
-                ->orWhere('body', 'like', '%' . request('search') . '%');
-        }
+                ->where('title', 'like', '%' . $search . '%')
+                ->orWhere('body', 'like', '%' . $search . '%');
+        });
     }
 }
