@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class PostController extends Controller
 {
     public function index() {
-        $posts = Post::latest()->filter(request(['search']))->get();
+        $posts = Post::latest()->filter(request(['search']))->simplePaginate(6)->withQueryString();
 
         return view('posts', [
             'posts' => $posts,
