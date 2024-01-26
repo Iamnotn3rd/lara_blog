@@ -3,13 +3,15 @@
 use App\Models\Post;
 use App\Models\User;
 use App\Models\Category;
-use Illuminate\Process\Exceptions\ProcessTimedOutException;
 use Illuminate\Support\Facades\DB;
 use Database\Factories\UserFactory;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\SessionController;
 use Spatie\YamlFrontMatter\YamlFrontMatter;
+use App\Http\Controllers\RegisterController;
 use PHPUnit\Framework\Attributes\PostCondition;
+use Illuminate\Process\Exceptions\ProcessTimedOutException;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,3 +41,10 @@ Route::get('/authors/{author:username}', function (User $author) {
         'posts' => $author->posts,
     ]);
 });
+
+Route::get('/register', [RegisterController::class, 'create'])->middleware('guest');
+Route::post('/register', [RegisterController::class, 'store'])->middleware('guest');
+
+Route::get('/login', [SessionController::class, 'create'])->middleware('guest');
+Route::post('/login', [SessionController::class, 'store'])->middleware('guest');
+Route::post('/logout', [SessionController::class, 'destroy'])->middleware('auth');
